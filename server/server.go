@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	"github.com/gotoolkits/authOtp/auth"
+	//uuid "github.com/gotoolkits/go.uuid"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	log "github.com/sirupsen/logrus"
@@ -12,7 +13,9 @@ import (
 )
 
 var (
-	sHost       = "8018"
+	sHost = "8018"
+	uuid  = "c98bad34-e0f2-4eec-bf98-2eda26af934a"
+
 	svrstus     SvrStatus
 	info        SysInfo
 	authMux     *sync.Mutex
@@ -42,12 +45,15 @@ type Count struct {
 }
 
 type SysInfo struct {
-	SysName string `json:"AppName"`
-	Version string `json:"Version"`
-	Author  string `json:"Author"`
+	AppID   string   `json:"AppID"`
+	SysName string   `json:"AppName"`
+	Version string   `json:"Version"`
+	APIs    []string `json:"APIs"`
+	Author  string   `json:"Author"`
 }
 
 func init() {
+
 	svrstus = SvrStatus{
 		RegisterCount: Count{},
 		OtpCount:      Count{},
@@ -55,14 +61,19 @@ func init() {
 	}
 
 	info = SysInfo{
+		AppID:   uuid,
 		SysName: "AuthOtp",
 		Version: "V0.1.1",
+		APIs:    nil,
 		Author:  "gotoolkits",
 	}
 
 	authMux = new(sync.Mutex)
 	otpMux = new(sync.Mutex)
 	registerMux = new(sync.Mutex)
+
+	//uid := uuid.NewV4()
+	//log.Printf("UUIDv4: %s\n", uid)
 
 }
 
@@ -86,8 +97,14 @@ func ServerRun() {
 	e.GET("/info", FnInfo)
 
 	log.Println("⇨ http server starting on ", ":"+sHost)
-
 	svrstus.Stime = time.Now().Format("2006-01-02 15:04:05")
+
+	apiRegister("/register")
+	apiRegister("/otp")
+	apiRegister("/auth")
+	apiRegister("/ping")
+	apiRegister("/status")
+	apiRegister("/info")
 
 	e.Logger.Fatal(e.Start(":" + sHost))
 }
@@ -211,4 +228,8 @@ func secCount(t string, err bool) {
 		return
 	}
 
+}
+
+func apiRegister(api string) {
+	info.APIs = append(info.APIs, api)
 }
