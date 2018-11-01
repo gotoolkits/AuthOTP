@@ -1,7 +1,7 @@
 package main
 
 import (
-	api "github.com/gotoolkits/authOtp/server"
+	api "github.com/gotoolkits/AuthOtp/server"
 )
 
 func main() {
