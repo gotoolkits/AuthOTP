@@ -92,7 +92,7 @@ func ServerRun() {
 	e.POST("/auth", FnAuthencator)
 
 	//self running status for monitor
-	e.GET("/ping", FnHealthCheck)
+	e.GET("/health", FnHealthCheck)
 	e.GET("/status", FnStatus)
 	e.GET("/info", FnInfo)
 
