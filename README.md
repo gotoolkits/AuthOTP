@@ -30,7 +30,7 @@ Post Body:
 
 > `/auth`
 
-  - 用途： 通过私有密钥，生成OTP一次性密码
+  - 用途： 验证OTP一次性密码
   - 方法: POST
   - 参数:   请求体JSON格式  ，`skey` 私有密钥 `otp` 需认证的密码
   - 返回： true/false 
